@@ -1,6 +1,5 @@
 package com.prs.business.user;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +18,7 @@ public class User {
 	private String lastName;
 	private String phoneNumber;
 	private String email;
-	@Column(name = "isReviewer")
 	private boolean isReviewer;
-	@Column(name = "isAdmin")
 	private boolean isAdmin;
 
 	public User() {
@@ -42,23 +39,22 @@ public class User {
 		this.isReviewer = isReviewer;
 		this.isAdmin = isAdmin;
 	}
-	
+
 	// constructor that excludes primary key id column
-		public User(String userName, String password, String firstName, String lastName, String phoneNumber,
-				String email) {
-			super();
-			this.userName = userName;
-			this.password = password;
-			this.firstName = firstName;
-			this.lastName = lastName;
-			this.phoneNumber = phoneNumber;
-			this.email = email;
-		}
+	public User(String userName, String password, String firstName, String lastName, String phoneNumber, String email) {
+		super();
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+	}
 
 	public User(int id) {
-			super();
-			this.id = id;
-		}
+		super();
+		this.id = id;
+	}
 
 	// getters and setters
 	public int getId() {

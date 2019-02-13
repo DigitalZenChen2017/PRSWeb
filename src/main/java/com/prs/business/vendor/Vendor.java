@@ -1,16 +1,10 @@
 package com.prs.business.vendor;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import com.prs.business.product.Product;
 
 @Entity
 public class Vendor {
@@ -27,18 +21,7 @@ public class Vendor {
 	private String phoneNumber;
 	private String email;
 	@Column(name = "isPreApproved") // changes variable name to match mySQL field name
-	private boolean preApproved;;
-
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="vendor")
-	private List<Product> products;
-
-	public List<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
+	private boolean preApproved;
 
 	public Vendor() {
 		super();
@@ -49,21 +32,6 @@ public class Vendor {
 			String phoneNumber, String email, boolean preApproved) {
 		super();
 		this.id = id;
-		this.code = code;
-		this.name = name;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.zip = zip;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.preApproved = preApproved;
-	}
-
-	// constructor used in PRSDB class
-	public Vendor(String code, String name, String address, String city, String state, String zip, String phoneNumber,
-			String email, boolean preApproved) {
-		super();
 		this.code = code;
 		this.name = name;
 		this.address = address;
@@ -158,17 +126,7 @@ public class Vendor {
 	@Override
 	public String toString() {
 		return "Vendor [id=" + id + ", code=" + code + ", name=" + name + ", address=" + address + ", city=" + city
-				+ ", state=" + state + ", zip=" + zip + ", phoneNumber=" + phoneNumber + ", email=" + email
-				+ ", preApproved=" + preApproved + ", products:" + products + "]";
+				+ ", state=" + state + ", zip=" + zip + ", phoneNumber=" + phoneNumber + ", email=" + email;
+//				+ ", preApproved=" + preApproved + ", products:" + products + "]";
 	}
-
-//	@Override
-//	public String toString() {
-////		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
-////				+ ", lastName=" + lastName + ", phoneNumber=" + phoneNumber + ", email=" + email + ", isReviewer="
-////				+ isReviewer + ", isAdmin=" + isAdmin + "]";
-//		return id + " " + code + " " + name + " " + address + " " + city + " " + state + " " + zip + " " + phoneNumber
-//				+ " " + email + " " + preApproved;
-//	}
-
 }
