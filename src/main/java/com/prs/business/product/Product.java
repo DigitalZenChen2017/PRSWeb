@@ -60,11 +60,11 @@ public class Product {
 		this.id = id;
 	}
 
-	public Vendor getVendorID() {
+	public Vendor getVendor() {
 		return vendor;
 	}
 
-	public void setVendorID(Vendor vendorID) {
+	public void setVendor(Vendor vendor) {
 		this.vendor = vendor;
 	}
 

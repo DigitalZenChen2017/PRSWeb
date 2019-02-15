@@ -22,7 +22,7 @@ public class PurchaseRequest {
 //	private int vendorID; // foreign key
 	@ManyToOne
 	@JoinColumn(name = "UserID") // look in SQL for column userID
-	private User user; // replace vendorID with instance of Vendor object
+	private User user; // replace UserID with instance of User object
 	private String description;
 	private String justification;
 	private LocalDate dateNeeded;
