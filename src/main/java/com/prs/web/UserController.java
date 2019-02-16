@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,13 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prs.business.user.User;
 import com.prs.business.user.UserRepository;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	@Autowired
 	UserRepository userRepository;
@@ -47,6 +49,19 @@ public class UserController {
 			jr = JsonResponse.getInstance(ex);
 		}
 		return jr;
+	}
+
+	// get users - pagination version
+	@GetMapping("")
+	public JsonResponse get(@RequestParam int start, @RequestParam int limit) {
+		JsonResponse jr = null;
+		try {
+			jr = JsonResponse.getInstance(userRepository.findAll(PageRequest.of(start, limit)));
+		} catch (Exception ex) {
+			jr = JsonResponse.getInstance(ex);
+		}
+		return jr;
+
 	}
 
 	@PostMapping("/")
@@ -88,4 +103,19 @@ public class UserController {
 		return jr;
 	}
 
+	@PostMapping("/authenticate")
+	public JsonResponse authenticate(@RequestBody User u) {
+		JsonResponse jr = null;
+		try {
+			Optional<User> user = userRepository.findByUserNameAndPassword(u.getUserName(), u.getPassword());
+			if (user.isPresent()) {
+				jr = JsonResponse.getInstance(user);
+			} else {
+				jr = JsonResponse.getInstance("No user/password combination found.");
+			}
+		} catch (Exception ex) {
+			jr = JsonResponse.getInstance(ex);
+		}
+		return jr;
+	}
 }

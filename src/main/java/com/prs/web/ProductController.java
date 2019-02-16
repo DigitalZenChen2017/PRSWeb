@@ -6,6 +6,7 @@ import com.prs.business.product.ProductRepository;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/product")
+@RequestMapping(path = "/products")
 public class ProductController {
 	@Autowired
 	ProductRepository productRepository;
@@ -47,6 +49,17 @@ public class ProductController {
 		}
 		return jr;
 	}
+	
+	@GetMapping("")
+	public JsonResponse getProduct(@RequestParam int start, @RequestParam int limit) {
+		JsonResponse jr = null;
+		try {
+			jr = JsonResponse.getInstance(productRepository.findAll(PageRequest.of(start, limit)));
+		} catch (Exception ex) {
+			jr = JsonResponse.getInstance(ex);
+		}
+		return jr;
+	}
 
 	@PostMapping("/")
 	public JsonResponse addProduct(@RequestBody Product p) {
@@ -55,8 +68,8 @@ public class ProductController {
 	}
 
 	@PutMapping("/{id}")
-	public JsonResponse updateProduct(@RequestBody Product v, @PathVariable int id) {
-		return saveProduct(v);
+	public JsonResponse updateProduct(@RequestBody Product p, @PathVariable int id) {
+		return saveProduct(p);
 	}
 
 	private JsonResponse saveProduct(Product p) {
@@ -75,10 +88,10 @@ public class ProductController {
 	public JsonResponse deleteProduct(@PathVariable int id) {
 		JsonResponse jr = null;
 		try {
-			Optional<Product> v = productRepository.findById(id);
-			if (v.isPresent()) {
+			Optional<Product> p = productRepository.findById(id);
+			if (p.isPresent()) {
 				productRepository.deleteById(id);
-				jr = JsonResponse.getInstance(v);
+				jr = JsonResponse.getInstance(p);
 			} else {
 				jr = JsonResponse.getInstance("No user found for id: " + id);
 			}

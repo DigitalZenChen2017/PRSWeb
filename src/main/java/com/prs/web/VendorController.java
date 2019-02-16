@@ -6,6 +6,7 @@ import com.prs.business.vendor.VendorRepository;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/vendor")
+@RequestMapping(path = "/vendors")
 public class VendorController {
 	@Autowired
 	VendorRepository vendorRepository;
@@ -42,6 +44,17 @@ public class VendorController {
 			} else {
 				jr = JsonResponse.getInstance("No User found for id:" + id);
 			}
+		} catch (Exception ex) {
+			jr = JsonResponse.getInstance(ex);
+		}
+		return jr;
+	}
+
+	@GetMapping("")
+	public JsonResponse getVendor(@RequestParam int start, @RequestParam int limit) {
+		JsonResponse jr = null;
+		try {
+			jr = JsonResponse.getInstance(vendorRepository.findAll(PageRequest.of(start, limit)));
 		} catch (Exception ex) {
 			jr = JsonResponse.getInstance(ex);
 		}
