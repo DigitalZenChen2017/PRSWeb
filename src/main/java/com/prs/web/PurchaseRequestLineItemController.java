@@ -66,21 +66,21 @@ public class PurchaseRequestLineItemController {
 	}
 
 	@PostMapping("/")
-	public JsonResponse addPurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem pr) {
-		return savePurchaseRequestLineItem(pr);
+	public JsonResponse addPurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem prli) {
+		return savePurchaseRequestLineItem(prli);
 	}
 
 	@PutMapping("/{id}")
-	public JsonResponse updatePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem pr, @PathVariable int id) {
-		return savePurchaseRequestLineItem(pr);
+	public JsonResponse updatePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem prli, @PathVariable int id) {
+		return savePurchaseRequestLineItem(prli);
 	}
 
-	private JsonResponse savePurchaseRequestLineItem(PurchaseRequestLineItem pr) {
+	private JsonResponse savePurchaseRequestLineItem(PurchaseRequestLineItem prli) {
 		JsonResponse jr = null;
 		try {
-			purchaseRequestLineItemRepository.save(pr);
-			jr = JsonResponse.getInstance(pr);
-			recalculateTotal(pr);
+			purchaseRequestLineItemRepository.save(prli);
+			jr = JsonResponse.getInstance(prli);
+			recalculateTotal(prli);
 		} catch (Exception ex) {
 			jr = JsonResponse.getInstance(ex.getMessage());
 			ex.printStackTrace();
@@ -110,7 +110,7 @@ public class PurchaseRequestLineItemController {
 //	 recalculateTotal method (insert into maintenance functions - create, update,
 //	 delete)
 	private void recalculateTotal(PurchaseRequestLineItem prli) {
-		PurchaseRequest pr = prli.getPurchaseRequest(); // gets PRID from PRLI
+		PurchaseRequest pr = prli.getPurchaseRequest(); // gets PurchaseRequest Object from PRLI
 		List<PurchaseRequestLineItem> filteredPRLIs = purchaseRequestLineItemRepository.findByPurchaseRequest(pr);
 		double total = 0;
 		for (PurchaseRequestLineItem prlis : filteredPRLIs) {

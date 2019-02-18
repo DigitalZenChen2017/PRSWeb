@@ -3,6 +3,7 @@ package com.prs.web;
 import com.prs.business.purchaserequest.PurchaseRequest;
 import com.prs.business.purchaserequest.PurchaseRequestRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +63,13 @@ public class PurchaseRequestController {
 	}
 
 	@PostMapping("/")
-	public JsonResponse addProduct(@RequestBody PurchaseRequest pr) {
+	public JsonResponse addPurchaseRequest(@RequestBody PurchaseRequest pr) {
 		return savePurchaseRequest(pr);
 
 	}
 
 	@PutMapping("/{id}")
-	public JsonResponse updateProduct(@RequestBody PurchaseRequest pr, @PathVariable int id) {
+	public JsonResponse updatePurchaseRequest(@RequestBody PurchaseRequest pr, @PathVariable int id) {
 		return savePurchaseRequest(pr);
 	}
 
@@ -85,7 +86,7 @@ public class PurchaseRequestController {
 	}
 
 	@DeleteMapping("/{id}")
-	public JsonResponse deleteProduct(@PathVariable int id) {
+	public JsonResponse deletePurchaseRequest(@PathVariable int id) {
 		JsonResponse jr = null;
 		try {
 			Optional<PurchaseRequest> pr = purchaserequestRepository.findById(id);
@@ -99,6 +100,39 @@ public class PurchaseRequestController {
 			jr = JsonResponse.getInstance(ex.getMessage());
 		}
 		return jr;
+	}
+
+	@PostMapping("/submit-new")
+	public JsonResponse submitNewPurchaseRequest(@RequestBody PurchaseRequest pr) {
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		pr.setStatus(PurchaseRequest.STATUS_NEW);
+		pr.setSubmittedDate(currentDateTime);
+		return savePurchaseRequest(pr);
+	}
+
+	@PostMapping("/submit-review")
+	public JsonResponse submitReviewPurchaseRequest(@RequestBody PurchaseRequest pr) {
+		double prTotal = pr.getTotal();
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		if (prTotal <= 50) {
+			pr.setStatus(PurchaseRequest.STATUS_APPROVED);
+			pr.setSubmittedDate(currentDateTime);
+		} else {
+			pr.setStatus(PurchaseRequest.STATUS_REVIEW);
+			pr.setSubmittedDate(currentDateTime);
+		}
+		return savePurchaseRequest(pr);
+	}
+
+	@PostMapping("/approve")
+	public JsonResponse approvePurchaseRequest(@RequestBody PurchaseRequest pr) {
+		pr.setStatus(PurchaseRequest.STATUS_APPROVED);
+		return savePurchaseRequest(pr);
+	}
+	@PostMapping("/reject")
+	public JsonResponse rejectPurchaseRequest(@RequestBody PurchaseRequest pr) {
+		pr.setStatus(PurchaseRequest.STATUS_REJECTED);
+		return savePurchaseRequest(pr);
 	}
 
 }

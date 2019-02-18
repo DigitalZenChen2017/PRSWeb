@@ -31,6 +31,14 @@ public class PurchaseRequest {
 	private double total;
 	private LocalDateTime submittedDate;
 	private String reasonForRejection;
+	
+	// purchase request statuses
+    public final static String STATUS_NEW = "New";
+	public final static String STATUS_REVIEW = "Review";
+	public final static String STATUS_APPROVED = "Approved";
+	public final static String STATUS_REJECTED = "Rejected";
+	
+	
 
 	// generated constructor
 	public PurchaseRequest(int id, User user, String description, String justification, LocalDate dateNeeded,
