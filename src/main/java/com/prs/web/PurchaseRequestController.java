@@ -130,9 +130,12 @@ public class PurchaseRequestController {
 		return savePurchaseRequest(pr);
 	}
 	@PostMapping("/reject")
-	public JsonResponse rejectPurchaseRequest(@RequestBody PurchaseRequest pr) {
+	public JsonResponse rejectPurchaseRequest(@RequestBody PurchaseRequest pr, String reasonForRejection) {
 		pr.setStatus(PurchaseRequest.STATUS_REJECTED);
+		pr.setReasonForRejection(reasonForRejection);
 		return savePurchaseRequest(pr);
 	}
-
+	
+//	@GetMapping("list-review") // shows only requests in review and not assigned to reviewer
+////	public JsonResponse 
 }
