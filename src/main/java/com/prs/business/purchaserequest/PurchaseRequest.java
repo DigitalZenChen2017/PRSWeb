@@ -34,7 +34,7 @@ public class PurchaseRequest {
 	
 	// purchase request statuses
     public final static String STATUS_NEW = "New";
-	public final static String STATUS_REVIEW = "Review";
+	public final static String STATUS_REVIEW = " In Review";
 	public final static String STATUS_APPROVED = "Approved";
 	public final static String STATUS_REJECTED = "Rejected";
 	

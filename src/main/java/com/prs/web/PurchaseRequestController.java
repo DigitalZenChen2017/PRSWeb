@@ -2,6 +2,7 @@ package com.prs.web;
 
 import com.prs.business.purchaserequest.PurchaseRequest;
 import com.prs.business.purchaserequest.PurchaseRequestRepository;
+import com.prs.business.user.User;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -104,9 +105,9 @@ public class PurchaseRequestController {
 
 	@PostMapping("/submit-new")
 	public JsonResponse submitNewPurchaseRequest(@RequestBody PurchaseRequest pr) {
-		LocalDateTime currentDateTime = LocalDateTime.now();
-		pr.setStatus(PurchaseRequest.STATUS_NEW);
-		pr.setSubmittedDate(currentDateTime);
+		LocalDateTime currentDateTime = LocalDateTime.now(); // instantiate LocalDateTime object named currentDateTime
+		pr.setStatus(PurchaseRequest.STATUS_NEW); // set PurchaseRequest object status
+		pr.setSubmittedDate(currentDateTime); // set PurchaseRequest object SubmittedDate
 		return savePurchaseRequest(pr);
 	}
 
@@ -129,13 +130,22 @@ public class PurchaseRequestController {
 		pr.setStatus(PurchaseRequest.STATUS_APPROVED);
 		return savePurchaseRequest(pr);
 	}
+
 	@PostMapping("/reject")
 	public JsonResponse rejectPurchaseRequest(@RequestBody PurchaseRequest pr, String reasonForRejection) {
 		pr.setStatus(PurchaseRequest.STATUS_REJECTED);
-		pr.setReasonForRejection(reasonForRejection);
+		pr.setReasonForRejection("N/A");
 		return savePurchaseRequest(pr);
 	}
-	
-//	@GetMapping("list-review") // shows only requests in review and not assigned to reviewer
-////	public JsonResponse 
+
+	@GetMapping("list-review") // shows only requests in review and not assigned to reviewer
+	public JsonResponse listReviewPurchaseRequests(@RequestBody User user) {
+		JsonResponse jr = null;
+		try {
+			jr = JsonResponse.getInstance(purchaserequestRepository.findByStatusAndUserNot(PurchaseRequest.STATUS_REVIEW, user));
+		} catch (Exception ex) {
+			jr = JsonResponse.getInstance(ex);
+		}
+		return jr;
+	}
 }
