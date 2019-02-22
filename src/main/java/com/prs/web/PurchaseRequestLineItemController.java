@@ -8,6 +8,8 @@ import com.prs.business.purchaserequest.PurchaseRequestRepository;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PurchaseRequestLineItemController {
 	@Autowired
 	PurchaseRequestLineItemRepository purchaseRequestLineItemRepository;
+	@Autowired
 	PurchaseRequestRepository purchaseRequestRepository;
+	@Autowired
+	EntityManager em;
 
 	@GetMapping("/")
 	public JsonResponse getAll() {
@@ -79,8 +84,9 @@ public class PurchaseRequestLineItemController {
 		JsonResponse jr = null;
 		try {
 			purchaseRequestLineItemRepository.save(prli);
-			jr = JsonResponse.getInstance(prli);
+			em.clear();
 			recalculateTotal(prli);
+			jr = JsonResponse.getInstance(prli);
 		} catch (Exception ex) {
 			jr = JsonResponse.getInstance(ex.getMessage());
 			ex.printStackTrace();

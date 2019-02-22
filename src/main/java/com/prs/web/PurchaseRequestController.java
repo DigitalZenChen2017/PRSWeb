@@ -142,7 +142,8 @@ public class PurchaseRequestController {
 	public JsonResponse listReviewPurchaseRequests(@RequestBody User user) {
 		JsonResponse jr = null;
 		try {
-			jr = JsonResponse.getInstance(purchaserequestRepository.findByStatusAndUserNot(PurchaseRequest.STATUS_REVIEW, user));
+			jr = JsonResponse
+					.getInstance(purchaserequestRepository.findByStatusAndUserNot(PurchaseRequest.STATUS_REVIEW, user));
 		} catch (Exception ex) {
 			jr = JsonResponse.getInstance(ex);
 		}
