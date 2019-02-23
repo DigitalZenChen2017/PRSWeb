@@ -114,7 +114,7 @@ public class PurchaseRequestLineItemController {
 	}
 
 //	 recalculateTotal method (insert into maintenance functions - create, update,
-//	 delete)
+//	 delete CUD)
 	private void recalculateTotal(PurchaseRequestLineItem prli) {
 		PurchaseRequest pr = prli.getPurchaseRequest(); // gets PurchaseRequest Object from PRLI
 		List<PurchaseRequestLineItem> filteredPRLIs = purchaseRequestLineItemRepository.findByPurchaseRequest(pr);
